@@ -1,0 +1,112 @@
+1 - show help:
+help
+=========================
+2- current working database:
+db
+
+show list of available databases:
+show dbs
+=========================
+3 - db.createCollection("studnets")
+show collections
+=========================
+4 - show dbs :
+notice : iti database created
+=========================
+insert student:
+5 - 
+  db.students.insert(
+	{
+		"name":"Ahmed",
+		"age":"27",
+		"courses":[
+				{"name":"C#","grade":"A"},
+				{"name":"Java","grade":"B"}
+			   ]
+	})
+======================================
+6 - find studnet by name :   
+db.students.findOne({"name":"Ahmed"})
+=========================================
+7- search by age:
+db.students.findOne({"age":"27"})
+db.students.find({"age":"27"})
+========================================
+8 - find age greater than 27:
+ db.students.find({"age":{$gt:"27"}})
+=========================================
+9 - remove by id :
+db.students.remove({"_id":ObjectId("6239eac590f71146a0efc080")})
+===================================
+10 - view all documents using pretty:
+ db.students.find().pretty()
+======================================
+11 - count all documnets
+ db.students.find().count()
+=====================================
+
+------------------------------------
+Part 2 
+-----------------------------------
+
+1 - create db and table : 
+		use ems
+		db.createCollection("faculty")
+================================================
+2 insert with followuing records:
+		db.faculty.insertMany( [{ "name":"Anush", "age":32,"gender":"F","exp":8,subjects:["C","CPP"],"type":"Part Time","qualification":"M.Tech" },
+         { "name":"Suresh", "age":40,"gender":"M","exp":9,subjects:["JAVA","DBMS","NETWORKING"],"type":"Full Time", "qualification":"Ph.D"},
+         { "name":"Rajesh", "age":35,"gender":"M","exp":7,subjects:["DS","C","OS"],"type":"Full Time","qualification":"M.Tech" },
+         { "name":"Mani", "age":38,"gender":"F","exp":10,subjects:["JAVA","DBMS","OS"],"type":"Part Time", "qualification":"Ph.D"},
+          { "name":"Sivani", "age":32,"gender":"F","exp":8,subjects:["C","CPP","MATHS"],"type":"Part Time","qualification":"M.Tech" },
+          { "name":"Nagesh", "age":39,"gender":"M","exp":11,subjects:["JAVA","DBMS","NETWORKING"],"type":"Full Time", "qualification":"Ph.D"},
+          { "name":"Nagesh", "age":35,"gender":"M","exp":9,subjects:["JAVA",".Net","NETWORKING"],"type":"Full Time", "qualification":"Ph.D"},
+          { "name":"Latha", "age":40,"gender":"F","exp":13,subjects:["MATHS"],"type":"Full Time", "qualification":"Ph.D"}]);
+===========================================================
+3 -  select all faculty members : 
+db.faculty.find().pretty()
+=================================================
+4 - find exp between 8 and 13
+db.faculty.find({"exp":{$lt:13,$gt:8}})
+================================================
+5 - memmbers teach MATRH or NETWORKING:
+             
+db.faculty.find({$or:[{"subjects":"MATHS"},{"subjects":"NETWORKING"}]})
+=====================================================================
+6 - memmbers teach MATHS and age = 30 with PHD:
+db.faculty.find({$and:[{"subjects":"MATHS"},{"age":{$gt:30}},{"qualification":"Ph.D"}]})
+========================================================================
+7- member working part-time with JAVA:
+db.faculty.find({$and:[{"subjects":"JAVA"},{"type":"Part Time"}]})
+=====================================================================
+8-  insert new member
+db.faculty.insertOne( { "name":"Suresh Babu", "age":55, "gender":"M", "exp":25, subjects:["MATHS","DE"], "type":"Full Time", "qualification":"Ph.D"} )
+
+=======================================================
+9 - update data of all members age ++ exp ++
+db.faculty.updateMany({},{ $inc: { age: 1, "exp": 1 } } )
+=================================================================
+10 - update Sivani qualification and type
+db.faculty.updateOne(
+   { "name": "Sivani" },
+   { $set: { "qualification":"Ph.D", "type": "Full Time" } }
+)
+==================================================================
+11 - update teachers who teaches Math to teach PSK also
+   db.faculty.updateMany({"subjects":"MATHS"},{ $set: { "subjects": ["MATHS","PSK"] } } )
+================================================================================
+12 - delete members age > 55
+ db.faculty.deleteMany({"age":{$gt:55}})
+===================================================
+13 - get name and qualification
+ db.faculty.find({},{"name":1,"qualification":1})
+====================================================
+14 - db.faculty.find().sort({},{"name":1,"qualification":1,"exp":1})
+	or 
+db.faculty.find({},{"name":1,"qualification":1,"exp":1}).sort({name:1})
+
+===========================================================================
+15 - sort by age desc and limit 5
+
+ db.faculty.find().sort({limit:5},{"name":-11,"qualification":-1,"exp":-1}).limit(5)
+
