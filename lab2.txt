@@ -1,0 +1,101 @@
+Part one 
+==================
+1 - mongoimport  -d iti -c zips --file ./zips.json
+-----------------------------------
+2 - db.zips.find({"state":"NY"})
+-----------------------------------
+3 - db.zips.find({"pop":{$gte:1000}})
+----------------------------------
+4 - db.zips.updateMany({"state":{$in:["VA","PA"]}},{$set:{"check":true}})
+-----------------------------------
+5 -  db.zips.find({$and: [{"loc.0": {$gt: 55}},{"loc.1": {$lt: 65}}]}).pretty()
+-----------------------------------
+6- db.zips.createIndex({"state":1})
+-----------------------------------
+7 - db.zips.updateMany({"state":{$nin:["AK","NY"]}},{$inc:{"pop":0.2}})
+-----------------------------------
+8 -db.zips.updateOne({"loc.0":{$lt:-71},"state":{$ne:"MA"},"pop":{$lt:200}} , {$set:{"pop":0}});
+----------------------------------
+
+
+part 2 
+======
+1 - db.zips.aggregate(
+    {
+        $match:{state:{$in:["PA","KA"]}}
+    },
+    {
+        $group:{_id:null,total:{$sum:"$pop"}}
+    }
+)
+--------------------------------------------------
+2 - db.zips.find({state:{$ne:["PA","KA"]}}).limit(5);
+--------------------------------------------------
+3 - db.zips.aggregate(
+    {
+        $match:{$and:[
+            {state:"AK"},{"loc.0":{$lt:65}},{"loc.0":{$gt:55} }
+        ]}
+    },
+    {
+        $group:{_id:null,total:{$sum:"$pop"}}
+    }
+)
+--------------------------------------------
+4- db.zips.aggregate([
+{
+    $match:{state:{$in:["AK","PK"]}}
+},
+{
+    $sort:{"pop":1},
+},
+{
+    $limit:7
+}
+]);
+-----------------------------------------------
+
+5- db.zips.aggregate(
+    {
+        $group:{_id:"$state",min:{$min:"$pop"},max:{$max:"$pop"}}
+    },
+    { $out: { db: "iti", coll: "mypop" } }
+
+)
+-------------------------------------------------
+6- db.zips.aggregate(
+    {
+        $group:{_id:"$_id",average:{$avg:"$pop"}}
+    },
+)
+----------------------------------------------------
+7 - db.zips.aggregate(
+    {
+        $sort:{"state":1,"city":1}
+    },
+)
+
+-------------------------------------------------------
+8 - db.zips.aggregate(
+    {
+        $sort:{"state":-1,"city":-1}
+    },
+)
+
+---------------------------------------------
+9- db.zips.aggregate([
+{
+    $match:{state:{$in:["CA","NY"]}}
+},
+{
+    $group:{_id:"$state",totalPopulation:{$sum:"$pop"}}
+}]);
+
+----------------------------------------------------
+10 - db.zips.aggregate(
+    {
+        $group:{_id:"$state",average:{$avg:"$pop"}}
+    },
+)
+
+
